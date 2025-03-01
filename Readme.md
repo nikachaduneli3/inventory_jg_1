@@ -4,7 +4,10 @@
    - create_date : Datetime : auto_now_add 
    - write_date : Datetime : auto_now
    - archived : Boolean : default False
-2. Item
+   class Meta:
+      abstract = True
+   
+2. Item(BaseModel)
     - name : CharField
     - description : TextField
     - price : FloatField
@@ -16,7 +19,7 @@
     - expiration_date : DateField
     - category m2o -> Category
 
-3. Category
+3. Category(BaseModel)
    - name : CharField
 
 

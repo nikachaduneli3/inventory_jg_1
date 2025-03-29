@@ -23,3 +23,8 @@ urlpatterns = [
     path('purchase_orders/', include('purchase_orders.urls')),
 
 ]
+
+from rest_framework.authtoken import views
+urlpatterns += [
+    path('api-token-auth/', views.obtain_auth_token)
+]

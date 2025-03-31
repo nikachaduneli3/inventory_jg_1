@@ -1,7 +1,7 @@
 from django.db import models
 from core.models import BaseModel
 from items.models import Item
-
+from locations.models import Location
 
 def generate_order_name():
     last_order = PurchaseOrder.objects.order_by('-id').first()
@@ -13,6 +13,8 @@ def generate_order_name():
 class PurchaseOrder(BaseModel):
     name = models.CharField(max_length=250, default=generate_order_name, unique=True, editable=False)
     completed = models.BooleanField(default=False, editable=False)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='purchase_orders')
+
     def __str__(self):
         return self.name
 

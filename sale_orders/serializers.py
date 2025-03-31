@@ -1,15 +1,14 @@
-from locations.models import Location
-from .models import PurchaseOrder, PurchaseOrderItem
+from .models import  SaleOrder, SaleOrderItem
 from rest_framework import serializers
 
 
-class PurchaseOrderItemSerializer(serializers.ModelSerializer):
-
+class SaleOrderItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PurchaseOrderItem
+        model = SaleOrderItem
         fields = '__all__'
 
     def create(self, validated_data):
+        print(validated_data)
         order = validated_data.get('order')
         item = validated_data.get('item')
         qty = validated_data.get('qty')
@@ -23,13 +22,10 @@ class PurchaseOrderItemSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class PurchaseOrderSerializer(serializers.ModelSerializer):
-    order_items = PurchaseOrderItemSerializer(many=True, read_only=True)
-    location_name = serializers.StringRelatedField(source='location')
-    location = serializers.PrimaryKeyRelatedField(queryset=Location.objects.all(), write_only=True)
-
+class SaleOrderSerializer(serializers.ModelSerializer):
+    order_items = SaleOrderItemSerializer(many=True, read_only=True)
     class Meta:
-        model = PurchaseOrder
+        model = SaleOrder
         fields = '__all__'
 
 

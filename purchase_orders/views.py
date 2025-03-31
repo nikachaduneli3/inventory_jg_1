@@ -3,6 +3,8 @@ from .models import PurchaseOrder, PurchaseOrderItem
 from .serializers import PurchaseOrderSerializer, PurchaseOrderItemSerializer
 from rest_framework.decorators import action
 from rest_framework.response import  Response
+from locations.models import LocationItem
+
 
 class PurchaseOrderViewSet(ModelViewSet):
     queryset = PurchaseOrder.objects.all()
@@ -13,10 +15,11 @@ class PurchaseOrderViewSet(ModelViewSet):
         order = PurchaseOrder.objects.get(pk=pk)
         if order.completed: return Response({'message': 'already validated'}, status=400)
 
+        location = order.location
+
         for order_item in order.order_items.all():
             item = order_item.item
-            item.stock_qty += order_item.qty
-            item.save()
+            location_item = LocationItem.objects.create(item=item, qty=order_item.qty, location=location)
         order.completed = True
         order.save()
         return Response({'message': 'order validated successfully'}, status=200)

@@ -28,5 +28,6 @@ class Item(BaseModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
     barcode =  models.CharField(max_length=13, editable=False, unique=True, default=generate_barcode)
 
+
     def __str__(self):
         return self.name

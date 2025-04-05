@@ -19,7 +19,11 @@ class PurchaseOrderViewSet(ModelViewSet):
 
         for order_item in order.order_items.all():
             item = order_item.item
-            location_item = LocationItem.objects.create(item=item, qty=order_item.qty, location=location)
+            location_item, created = LocationItem.objects.get_or_create(item=item, location=location)
+            if created:
+                location_item.qty = order_item.qty
+            else: location_item.qty += order_item.qty
+
         order.completed = True
         order.save()
         return Response({'message': 'order validated successfully'}, status=200)
